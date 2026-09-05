@@ -1,0 +1,41 @@
+generated: '2026-09-05'
+method: searched
+source: >-
+  www.zartico.com and support.zartico.com searched for a limits/quota/throttling page (none
+  exists); response headers read from live anonymous requests to
+  https://geoserver.zartico.com/geoserver/ows and https://login.zartico.com/.well-known/openid-configuration
+limit_count: 0
+note: |
+  Zartico documents no rate limits anywhere. There is no developer portal on which to publish
+  them, and the help center has no quota, throttling or fair-use article.
+
+  Observed at runtime: responses from geoserver.zartico.com carry no X-RateLimit-*, no
+  RateLimit-* and no Retry-After header, and repeated anonymous GetCapabilities requests were
+  served without throttling. The only quantitative service ceiling published anywhere on the
+  estate is inside the WFS contract itself, and it is a paging default rather than a rate limit -
+  recorded below so a reader does not mistake its absence for a gap in this file.
+limits: []
+service_ceilings:
+  - name: WFS CountDefault
+    value: 1000000
+    scope: per GetFeature request
+    source: openapi/zartico-geoserver-wfs-capabilities.xml (ows:Constraint name="CountDefault")
+    note: >-
+      The maximum number of features returned when the client sets no count. A response-size
+      ceiling declared by the contract, not a request-rate limit.
+  - name: WFS ImplementsResultPaging
+    value: 'TRUE'
+    scope: per GetFeature request
+    source: openapi/zartico-geoserver-wfs-capabilities.xml
+    note: startIndex/count paging is available, which is how a client bounds a large result set.
+response_headers:
+  rate_limit_headers_present: false
+  retry_after_present: false
+  exhaustion_status_code: null
+  observed_on:
+    - https://geoserver.zartico.com/geoserver/ows?service=WMS&version=1.3.0&request=GetCapabilities
+    - https://login.zartico.com/.well-known/openid-configuration
+  note: >-
+    login.zartico.com and platform.zartico.com are Okta tenants and are therefore subject to
+    Okta's own org rate limits, but Zartico publishes nothing about them and the anonymous
+    discovery responses carry no rate-limit headers, so no number is asserted here.

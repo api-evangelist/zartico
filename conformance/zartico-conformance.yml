@@ -1,0 +1,167 @@
+generated: '2026-09-05'
+method: probed
+source: >-
+  Live anonymous fetches on 2026-09-05 of the GeoServer OWS capabilities documents at
+  https://geoserver.zartico.com/geoserver/ows and the OpenID Connect / OAuth 2.0 discovery
+  documents at login.zartico.com and platform.zartico.com; plus https://www.zartico.com/security
+  and https://www.zartico.com/privacy-promise for stated compliance posture.
+note: |
+  Zartico's conformance is entirely OGC and OAuth/OIDC. There is no OpenAPI, no JSON:API, no
+  RFC 9457 problem+json, no OData and no SCIM anywhere on the estate. The OGC entries below are
+  DEFINITIVE rather than inferred: an XML root element of WMS_Capabilities / wfs:WFS_Capabilities /
+  wcs:Capabilities in the opengis.net namespace IS the conformance claim, made by the service
+  about itself.
+conformance:
+  - id: ogc-wms-1.3.0
+    name: OGC Web Map Service 1.3.0
+    conforms: true
+    evidence: https://geoserver.zartico.com/geoserver/ows?service=WMS&version=1.3.0&request=GetCapabilities
+    artifact: openapi/zartico-geoserver-wms-capabilities.xml
+    detail: >-
+      HTTP 200, content-type text/xml, root <WMS_Capabilities version="1.3.0"
+      xmlns="http://www.opengis.net/wms">. Advertises GetCapabilities, GetMap and GetFeatureInfo;
+      34 named layers; 11 output formats (image/png, image/jpeg, image/gif, image/svg+xml,
+      image/geotiff, image/tiff, image/vnd.jpeg-png and 8-bit variants); 7,957 supported CRS
+      codes. Fees "none", AccessConstraints "none".
+  - id: ogc-wfs-2.0.0
+    name: OGC Web Feature Service 2.0.0
+    conforms: true
+    evidence: https://geoserver.zartico.com/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities
+    artifact: openapi/zartico-geoserver-wfs-capabilities.xml
+    detail: >-
+      HTTP 200, content-type application/xml, root <wfs:WFS_Capabilities version="2.0.0">,
+      ows:ServiceType WFS. 27 feature types. Eleven operations - GetCapabilities,
+      DescribeFeatureType, GetFeature, GetPropertyValue, GetFeatureWithLock, LockFeature,
+      Transaction, ListStoredQueries, DescribeStoredQueries, CreateStoredQuery, DropStoredQuery.
+      Declares ImplementsTransactionalWFS TRUE, ImplementsLockingWFS TRUE, ImplementsResultPaging
+      TRUE, CountDefault 1000000. Output formats include application/json (GeoJSON),
+      application/gml+xml version 3.2 and KML. Default CRS urn:ogc:def:crs:EPSG::4326.
+  - id: ogc-wcs-2.0.1
+    name: OGC Web Coverage Service 2.0.1
+    conforms: true
+    evidence: https://geoserver.zartico.com/geoserver/ows?service=WCS&version=2.0.1&request=GetCapabilities
+    artifact: openapi/zartico-geoserver-wcs-capabilities.xml
+    detail: >-
+      HTTP 200, root <wcs:Capabilities>, ows:ServiceType urn:ogc:service:wcs, ServiceTypeVersions
+      2.0.1 / 1.1.1 / 1.1.0. Operations GetCapabilities, DescribeCoverage, GetCoverage. Formats
+      image/tiff;application=geotiff, image/png, image/jpeg, application/gml+xml. NOTE: the
+      capabilities document currently advertises ZERO wcs:CoverageSummary entries - the service
+      is enabled but publishes no coverages.
+  - id: ogc-wmts-1.0.0
+    name: OGC Web Map Tile Service 1.0.0
+    conforms: false
+    evidence: https://geoserver.zartico.com/geoserver/ows?service=WMTS&version=1.0.0&request=GetCapabilities
+    detail: >-
+      HTTP 200 but the body is an <ows:ExceptionReport> - the WMTS service is not enabled on this
+      OWS endpoint. Recorded as a probed absence.
+  - id: ogc-csw-2.0.2
+    name: OGC Catalogue Service for the Web 2.0.2
+    conforms: false
+    evidence: https://geoserver.zartico.com/geoserver/ows?service=CSW&version=2.0.2&request=GetCapabilities
+    detail: HTTP 200 with an <ows:ExceptionReport> body - CSW is not enabled.
+  - id: ogc-api-features
+    name: OGC API - Features (Part 1, Core)
+    conforms: false
+    evidence: https://geoserver.zartico.com/geoserver/ogc/features/v1/conformance
+    detail: >-
+      HTTP 404 (Tomcat). /geoserver/ogc/features, /geoserver/ogc/features/conformance,
+      /geoserver/ogc/features/v1/collections and /geoserver/wfs3 all returned 404. The modern
+      OGC API module is not deployed; only the classic OWS stack is.
+  - id: oidc-discovery-1.0
+    name: OpenID Connect Discovery 1.0
+    conforms: true
+    evidence: https://login.zartico.com/.well-known/openid-configuration
+    artifact: well-known/zartico-login-openid-configuration.json
+    detail: >-
+      HTTP 200 application/json, issuer https://login.zartico.com, 29 metadata keys including
+      authorization/token/userinfo/jwks/registration/introspection/revocation/end_session
+      endpoints and RS256 id_token signing. platform.zartico.com serves an equivalent document
+      (26 keys).
+  - id: oauth2-rfc8414
+    name: RFC 8414 OAuth 2.0 Authorization Server Metadata
+    conforms: true
+    evidence: https://login.zartico.com/.well-known/oauth-authorization-server
+    artifact: well-known/zartico-login-oauth-authorization-server.json
+    detail: >-
+      HTTP 200 application/json, 24 metadata keys. platform.zartico.com serves an equivalent
+      21-key document.
+  - id: oauth2-pkce-rfc7636
+    name: RFC 7636 Proof Key for Code Exchange
+    conforms: true
+    evidence: https://login.zartico.com/.well-known/openid-configuration
+    detail: code_challenge_methods_supported ["S256"] on both authorization servers.
+  - id: oauth2-par-rfc9126
+    name: RFC 9126 OAuth 2.0 Pushed Authorization Requests
+    conforms: true
+    evidence: https://login.zartico.com/.well-known/openid-configuration
+    detail: >-
+      pushed_authorization_request_endpoint present on login.zartico.com only. NOT advertised by
+      platform.zartico.com.
+  - id: oauth2-dcr-rfc7591
+    name: RFC 7591 OAuth 2.0 Dynamic Client Registration
+    conforms: true
+    evidence: https://login.zartico.com/.well-known/openid-configuration
+    detail: >-
+      registration_endpoint https://login.zartico.com/oauth2/v1/clients advertised on both
+      servers. Advertised only - not exercised.
+  - id: oauth2-dpop-rfc9449
+    name: RFC 9449 OAuth 2.0 Demonstrating Proof of Possession
+    conforms: true
+    evidence: https://login.zartico.com/.well-known/openid-configuration
+    detail: dpop_signing_alg_values_supported [RS256, RS384, RS512, ES256, ES384, ES512].
+  - id: rfc9116-security-txt
+    name: RFC 9116 security.txt
+    conforms: false
+    evidence: https://www.zartico.com/.well-known/security.txt
+    detail: HTTP 404 on every host on the estate. See well-known/zartico-well-known.yml.
+  - id: rfc9457-problem-details
+    name: RFC 9457 Problem Details for HTTP APIs
+    conforms: false
+    evidence: https://geoserver.zartico.com/geoserver/ows?service=WMTS&request=GetCapabilities
+    detail: >-
+      Errors on the OGC surface are OGC ows:ExceptionReport XML, not application/problem+json.
+      No JSON API surface exists on which to observe RFC 9457.
+  - id: openapi
+    name: OpenAPI Specification
+    conforms: false
+    evidence: https://www.zartico.com/openapi.json
+    detail: >-
+      HTTP 404. /openapi.json, /openapi.yaml, /swagger.json, /api-docs, /docs and /redoc were
+      probed on zartico.com, www.zartico.com, support.zartico.com, go.zartico.com and
+      geoserver.zartico.com - every one 404 or a non-spec HTML shell.
+compliance:
+  - id: gdpr
+    conforms: claimed
+    evidence: https://www.zartico.com/security
+    detail: >-
+      Zartico's public security page states GDPR compliance and that its location-data providers
+      hold GDPR Privacy Shield certification. Self-asserted on a marketing page; no audit report,
+      certificate or trust center is published.
+  - id: ccpa
+    conforms: claimed
+    evidence: https://www.zartico.com/security
+    detail: Self-asserted on the same page.
+  - id: soc2
+    conforms: false
+    evidence: https://www.zartico.com/security
+    detail: >-
+      No SOC 2 attestation is named. Nor ISO 27001, PCI DSS, HIPAA or FedRAMP. No trust center
+      exists at trust.zartico.com (DNS does not resolve).
+domain_standards:
+  note: >-
+    REWARD-ONLY, and honestly empty of a market standard. Destination marketing and tourism
+    analytics has no widely adopted contract-level interchange standard comparable to FHIR,
+    SCIM or ISO 20022, and Zartico's contract declares none. What it DOES declare is a
+    cross-cutting geospatial standard family, recorded above as ogc-wms-1.3.0 / ogc-wfs-2.0.0 /
+    ogc-wcs-2.0.1 - the OGC signature IS the domain-standard signal for a location-intelligence
+    provider, and it is present, self-declared, and machine-readable.
+  declared:
+    - standard: OGC Web Services (OWS) Common
+      signature: XML root elements in the http://www.opengis.net/{wms,wfs,wcs} namespaces
+      evidence: https://geoserver.zartico.com/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities
+    - standard: EPSG coordinate reference system registry
+      signature: urn:ogc:def:crs:EPSG::4326 as DefaultCRS; 7,957 EPSG codes in the WMS CRS list
+      evidence: openapi/zartico-geoserver-wms-capabilities.xml
+    - standard: GML 3.2 / GeoJSON feature encoding
+      signature: WFS outputFormat values application/gml+xml; version=3.2 and application/json
+      evidence: openapi/zartico-geoserver-wfs-capabilities.xml

@@ -1,0 +1,44 @@
+generated: '2026-09-05'
+method: searched
+source: >-
+  https://www.zartico.com/pricing (HTTP 404), https://www.zartico.com/solutions (200),
+  https://www.zartico.com/see-a-live-demo (200), https://www.zartico.com/contact-us (200), and
+  the full www.zartico.com sitemap (no pricing, plans or packages page exists)
+plan_count: 0
+model: contact-sales
+note: |
+  Zartico publishes NO pricing of any kind. There is no /pricing page - the path returns HTTP 404
+  - and no plans, tiers, packages or price points appear anywhere in the sitemap, on the solutions
+  pages or in the help center. Every commercial path on the site funnels to a form: "See a live
+  demo" (https://www.zartico.com/see-a-live-demo) or "Contact us"
+  (https://www.zartico.com/contact-us).
+
+  This is an enterprise contact-sales motion sold to destination marketing organizations, states,
+  airports, attractions and ski resorts. Product packaging is visible - ZDOS Destination, ZDOS
+  State and ZDOS Airport are named and separately branded on the site, and the help center
+  describes per-module products such as Lodging Premium - but no price, quota, seat count or
+  overage is attached to any of them in public.
+
+  There is no self-serve signup, no free tier, no trial price and no published quota, so an
+  agent or a buyer cannot determine cost without a sales conversation.
+plans: []
+packaging_observed:
+  - name: ZDOS Destination
+    price: null
+    source: https://www.zartico.com/solutions
+  - name: ZDOS State
+    price: null
+    source: https://www.zartico.com/states
+  - name: ZDOS Airport
+    price: null
+    source: https://www.zartico.com/news/next-gen
+sales_gates:
+  - url: https://www.zartico.com/see-a-live-demo
+    status: 200
+    kind: demo-request-form
+  - url: https://www.zartico.com/contact-us
+    status: 200
+    kind: contact-form
+  - url: https://www.zartico.com/pricing
+    status: 404
+    kind: absent

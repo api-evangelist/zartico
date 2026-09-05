@@ -1,0 +1,247 @@
+generated: '2026-09-05'
+method: probed
+source: >-
+  Live anonymous probes on 2026-09-05 of every host this record knows - the registrable domain
+  and www, the OGC baseURL host, the identity baseURL host, the docs/help host, the HubSpot CMS
+  asset host, and the additional application hosts found in Certificate Transparency logs for
+  zartico.com (crt.sh).
+note: |
+  TWO REAL HITS, both identity metadata on Okta-fronted hosts: login.zartico.com and
+  platform.zartico.com each serve a complete OpenID Connect Discovery 1.0 document AND an
+  RFC 8414 OAuth 2.0 Authorization Server Metadata document. Both are saved verbatim here.
+
+  NO security.txt (RFC 9116) is published anywhere on the Zartico estate. No api-catalog
+  (RFC 9727), no ai-plugin.json, no agent card on any host.
+
+  SOFT-200 CAUTION. my.zartico.com, z5.zartico.com and event-pulse.zartico.com are single-page
+  applications whose catch-all route answers HTTP 200 with an HTML shell for EVERY unknown path,
+  including every /.well-known/* path, /openapi.json and /llms.txt. Those 200s are recorded below
+  with real: false - they are the SPA shell, not documents, and a later round must not read them
+  as hits. login.zartico.com and platform.zartico.com return Okta error 405 E0000022 on the
+  paths they do not serve, which is an honest miss.
+hosts:
+  - host: https://zartico.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+        real: false
+      - path: /.well-known/openid-configuration
+        status: 404
+        real: false
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+        real: false
+      - path: /.well-known/api-catalog
+        status: 404
+        real: false
+      - path: /.well-known/ai-plugin.json
+        status: 404
+        real: false
+      - path: /.well-known/agent-card.json
+        status: 404
+        real: false
+      - path: /.well-known/agent.json
+        status: 404
+        real: false
+      - path: /llms.txt
+        status: 404
+        real: false
+  - host: https://www.zartico.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+        real: false
+      - path: /.well-known/openid-configuration
+        status: 404
+        real: false
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+        real: false
+      - path: /.well-known/api-catalog
+        status: 404
+        real: false
+      - path: /.well-known/ai-plugin.json
+        status: 404
+        real: false
+      - path: /.well-known/agent-card.json
+        status: 404
+        real: false
+      - path: /.well-known/agent.json
+        status: 404
+        real: false
+      - path: /llms.txt
+        status: 404
+        real: false
+      - path: /openapi.json
+        status: 404
+        real: false
+  - host: https://login.zartico.com
+    documents:
+      - path: /.well-known/openid-configuration
+        status: 200
+        real: true
+        content_type: application/json
+        file: zartico-login-openid-configuration.json
+        standard: OpenID Connect Discovery 1.0
+        note: >-
+          Okta-hosted. Issuer https://login.zartico.com; 29 metadata keys; PKCE S256; DPoP
+          signing algs advertised; device_code, CIBA and Okta OOB/OTP grants; PAR endpoint.
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        real: true
+        content_type: application/json
+        file: zartico-login-oauth-authorization-server.json
+        standard: RFC 8414 OAuth 2.0 Authorization Server Metadata
+        note: >-
+          24 metadata keys. scopes_supported carries the seven OIDC scopes plus 78 Okta org
+          management scopes (okta.*) - those are Okta platform defaults, not Zartico-authored
+          product scopes.
+      - path: /.well-known/security.txt
+        status: 405
+        real: false
+        note: Okta error E0000022 (method not allowed on an unserved path) - an honest miss.
+      - path: /.well-known/api-catalog
+        status: 405
+        real: false
+      - path: /.well-known/ai-plugin.json
+        status: 404
+        real: false
+      - path: /.well-known/agent-card.json
+        status: 404
+        real: false
+  - host: https://platform.zartico.com
+    documents:
+      - path: /.well-known/openid-configuration
+        status: 200
+        real: true
+        content_type: application/json
+        file: zartico-platform-openid-configuration.json
+        standard: OpenID Connect Discovery 1.0
+        note: >-
+          Okta-hosted. Issuer https://platform.zartico.com; 26 metadata keys; PKCE S256. A
+          narrower grant set than login.zartico.com - no CIBA, no Okta OOB/OTP, no PAR.
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        real: true
+        content_type: application/json
+        file: zartico-platform-oauth-authorization-server.json
+        standard: RFC 8414 OAuth 2.0 Authorization Server Metadata
+        note: 21 metadata keys.
+      - path: /.well-known/security.txt
+        status: 405
+        real: false
+      - path: /.well-known/api-catalog
+        status: 405
+        real: false
+      - path: /.well-known/agent-card.json
+        status: 404
+        real: false
+  - host: https://geoserver.zartico.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+        real: false
+      - path: /.well-known/api-catalog
+        status: 404
+        real: false
+      - path: /.well-known/agent-card.json
+        status: 404
+        real: false
+      - path: /llms.txt
+        status: 404
+        real: false
+  - host: https://support.zartico.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+        real: false
+      - path: /.well-known/openid-configuration
+        status: 404
+        real: false
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+        real: false
+      - path: /.well-known/api-catalog
+        status: 404
+        real: false
+      - path: /.well-known/ai-plugin.json
+        status: 404
+        real: false
+      - path: /.well-known/agent-card.json
+        status: 404
+        real: false
+      - path: /.well-known/agent.json
+        status: 404
+        real: false
+      - path: /llms.txt
+        status: 404
+        real: false
+  - host: https://go.zartico.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+        real: false
+      - path: /.well-known/api-catalog
+        status: 404
+        real: false
+      - path: /.well-known/agent-card.json
+        status: 404
+        real: false
+  - host: https://my.zartico.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        real: false
+        note: SPA catch-all HTML shell, not a document.
+      - path: /.well-known/openid-configuration
+        status: 200
+        real: false
+        note: SPA catch-all HTML shell, not a document.
+      - path: /.well-known/agent-card.json
+        status: 200
+        real: false
+        note: SPA catch-all HTML shell, not a document.
+      - path: /.well-known/api-catalog
+        status: 200
+        real: false
+        note: SPA catch-all HTML shell, not a document.
+      - path: /llms.txt
+        status: 200
+        real: false
+        note: SPA catch-all HTML shell, not a document.
+  - host: https://z5.zartico.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        real: false
+        note: SPA catch-all HTML shell, not a document.
+      - path: /.well-known/openid-configuration
+        status: 200
+        real: false
+        note: SPA catch-all HTML shell, not a document.
+      - path: /.well-known/agent-card.json
+        status: 200
+        real: false
+        note: SPA catch-all HTML shell, not a document.
+      - path: /llms.txt
+        status: 200
+        real: false
+        note: SPA catch-all HTML shell, not a document.
+  - host: https://event-pulse.zartico.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        real: false
+        note: SPA catch-all HTML shell, not a document.
+      - path: /.well-known/openid-configuration
+        status: 200
+        real: false
+        note: SPA catch-all HTML shell, not a document.
+      - path: /.well-known/agent-card.json
+        status: 200
+        real: false
+        note: SPA catch-all HTML shell, not a document.
+      - path: /llms.txt
+        status: 200
+        real: false
+        note: SPA catch-all HTML shell, not a document.

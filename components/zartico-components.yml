@@ -1,0 +1,45 @@
+generated: '2026-09-05'
+method: searched
+source: >-
+  https://support.zartico.com/integrate-zartico-website-attribution (200),
+  https://support.zartico.com/integrate-google-analytics (200),
+  https://support.zartico.com/integrate-your-ad-server (200),
+  registry.npmjs.org metadata for @zartico/modal and zartico-modal
+note: |
+  Zartico's only documented client-side deployable is a tracking pixel, not an embeddable widget
+  library. There is no embed SDK, no web-component set and no hosted iframe/dashboard embed
+  documented on the public surface. What exists is listed honestly below.
+components:
+  - family: Website Attribution
+    name: Zartico geolocation attribution pixel
+    kind: tracking-pixel
+    delivery: 1x1 image tag deployed via Google Tag Manager as a Custom Image tag on All Pages
+    host: serve.uberads.com
+    example_form: https://serve.uberads.com/attr/pixel/99999?ut1=&ut2=&ut3=
+    docs: https://support.zartico.com/integrate-zartico-website-attribution
+    per_customer: true
+    note: >-
+      The URL is issued per destination - the 99999 in the documented example is a placeholder
+      account id, and the help article instructs customers to "place the pixel exactly as provided
+      by Zartico". The documented payload is IP address, IP-derived coarse location, page path,
+      referrer and page URL. THE PIXEL IS NOT SERVED FROM A ZARTICO DOMAIN: it is hosted on
+      serve.uberads.com, a third-party ad-serving host, which is recorded here because a reader
+      evaluating data flow needs to know the collection endpoint is not first-party infrastructure.
+  - family: Modal UI
+    name: '@zartico/modal'
+    kind: react-component
+    delivery: npm, UMD build at dist/index.umd.js; also reachable over unpkg/jsDelivr
+    package: packages/zartico-packages.yml
+    docs: null
+    note: >-
+      Published to npm under the @zartico scope by Zartico staff, React + MUI, last released
+      2024-01-28. No public documentation, no repository, stock Vite scaffold description. Listed
+      for completeness; it is not a documented, supported embed surface.
+absent:
+  - embedded-dashboard-sdk
+  - web-components
+  - hosted-checkout-or-form
+  - element-library
+counts:
+  families: 2
+  first_party_hosted: 1

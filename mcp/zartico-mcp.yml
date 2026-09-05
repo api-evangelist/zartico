@@ -1,0 +1,28 @@
+generated: '2026-09-05'
+method: searched
+source: >-
+  Web search for a Zartico MCP server; probes of mcp.zartico.com (DNS NXDOMAIN),
+  https://www.zartico.com/.well-known/ai-plugin.json (404), the Certificate Transparency host
+  list for zartico.com (crt.sh - no mcp.* host exists), npm (@zartico scope holds one modal
+  component only), and github.com/zartico (0 public repositories).
+status: none
+note: |
+  Zartico publishes no MCP server, hosted or local. No mcp.* host appears in Certificate
+  Transparency for zartico.com, no MCP package is published under the @zartico npm scope, the
+  GitHub organization has no public repositories, and no /.well-known/ai-plugin.json exists on
+  any host.
+
+  NO CANDIDATE TOOL LIST IS DERIVED HERE. The pipeline permits deriving a candidate tool list
+  from OpenAPI operations; Zartico has no OpenAPI. Its only machine-readable contract is an OGC
+  OWS capabilities set, whose operations (GetMap, GetFeatureInfo, GetFeature, Transaction) are
+  parameterised by CRS, bounding box and XML filter encodings rather than by a JSON schema, and
+  fabricating an inputSchema for them would invent a surface Zartico has not published. Recorded
+  as an honest absence instead.
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: searched
+tools: []

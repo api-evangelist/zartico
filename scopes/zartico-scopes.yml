@@ -1,0 +1,67 @@
+generated: '2026-09-05'
+method: probed
+source: >-
+  https://login.zartico.com/.well-known/openid-configuration (200) and
+  https://login.zartico.com/.well-known/oauth-authorization-server (200);
+  https://platform.zartico.com/.well-known/openid-configuration (200) and
+  https://platform.zartico.com/.well-known/oauth-authorization-server (200)
+docs: null
+note: |
+  IMPORTANT READING NOTE. Zartico authors NO product scopes. Both authorization servers are Okta
+  tenants, and everything advertised in scopes_supported is an Okta platform default: the seven
+  standard OpenID Connect scopes, plus 78 okta.* org-management scopes that govern the Okta
+  tenant itself (users, groups, apps, policies, logs, brands, domains), not Zartico destination
+  data. There is no Zartico resource server behind these scopes that a third party can call, and
+  Zartico publishes no scopes/permissions reference page - repeated searching of www.zartico.com
+  and support.zartico.com found none. The okta.* list is recorded once, compressed, so a reader
+  can see WHAT it is rather than mistaking 85 entries for a rich Zartico permission model.
+scopes:
+  - name: openid
+    description: OpenID Connect authentication; returns an ID token.
+    standard: OpenID Connect Core 1.0
+    servers: [login.zartico.com, platform.zartico.com]
+  - name: email
+    description: The end user's email address and email_verified claim.
+    standard: OpenID Connect Core 1.0
+    servers: [login.zartico.com, platform.zartico.com]
+  - name: profile
+    description: Default profile claims - name, given_name, family_name, locale, updated_at.
+    standard: OpenID Connect Core 1.0
+    servers: [login.zartico.com, platform.zartico.com]
+  - name: address
+    description: The end user's postal address claim.
+    standard: OpenID Connect Core 1.0
+    servers: [login.zartico.com, platform.zartico.com]
+  - name: phone
+    description: The end user's phone_number and phone_number_verified claims.
+    standard: OpenID Connect Core 1.0
+    servers: [login.zartico.com, platform.zartico.com]
+  - name: offline_access
+    description: Issues a refresh token so the client can renew access without the user present.
+    standard: OpenID Connect Core 1.0
+    servers: [login.zartico.com, platform.zartico.com]
+  - name: groups
+    description: Group memberships of the end user, as configured in the Okta tenant.
+    standard: Okta extension
+    servers: [login.zartico.com, platform.zartico.com]
+vendor_default_scopes:
+  prefix: okta.*
+  count: 78
+  vendor: Okta
+  scope_of_control: The Okta organization itself, not Zartico product data.
+  examples:
+    - okta.users.read
+    - okta.users.manage
+    - okta.groups.read
+    - okta.apps.manage
+    - okta.policies.manage
+    - okta.logs.read
+    - okta.sessions.manage
+    - okta.apiTokens.manage
+  note: >-
+    Advertised identically by both authorization servers. Present because they are Okta org
+    authorization server defaults - they are not evidence of a Zartico-designed permission model.
+counts:
+  zartico_authored_scopes: 0
+  standard_oidc_scopes: 7
+  vendor_default_scopes: 78

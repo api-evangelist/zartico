@@ -1,0 +1,73 @@
+generated: '2026-09-05'
+method: searched
+source: >-
+  www.zartico.com sitemap and support.zartico.com sitemap searched in full for a versioning
+  policy, deprecation policy, SLA, release notes or status page; probes of
+  https://status.zartico.com (DNS does not resolve), https://www.zartico.com/changelog (404),
+  https://support.zartico.com/release-notes (404), https://support.zartico.com/product-updates
+  (404); plus the version declarations inside the OGC capabilities documents in openapi/.
+note: |
+  Zartico publishes no API lifecycle apparatus at all - no versioning policy, no deprecation
+  policy, no Sunset or Deprecation headers, no SLA, no status page and no changelog. This is
+  consistent with having no developer program: there is no audience of third-party integrators to
+  whom such commitments would be made.
+versioning:
+  policy_published: false
+  scheme: OGC per-request version negotiation (the version= query parameter)
+  current_versions:
+    wms: 1.3.0
+    wms_also_accepted: ['1.1.1', '1.1.0']
+    wfs: 2.0.0
+    wcs: 2.0.1
+    wcs_also_accepted: ['1.1.1', '1.1.0']
+  evidence: openapi/zartico-geoserver-wms-capabilities.xml, openapi/zartico-geoserver-wfs-capabilities.xml
+  note: >-
+    These are the OGC specification versions the software implements, not a Zartico product
+    version. The WMS capabilities document carries updateSequence 88, which is GeoServer's own
+    configuration-change counter and the closest thing to a change signal the estate emits.
+deprecation:
+  policy_published: false
+  rfc8594_headers: false
+  sunset_header_observed: false
+  deprecation_header_observed: false
+  deprecated_operations: []
+  note: >-
+    No Sunset or Deprecation header was returned on any probed response, and no operation in any
+    capabilities document is flagged deprecated. The WCS service is a partial exception worth
+    recording: it answers GetCapabilities but advertises zero coverages, which is an endpoint
+    enabled and empty rather than an endpoint deprecated.
+status_page:
+  published: false
+  probed:
+    - url: https://status.zartico.com/
+      status: 000
+      note: DNS does not resolve.
+    - url: https://trust.zartico.com/
+      status: 000
+      note: DNS does not resolve.
+  note: >-
+    No status page exists on any host, on statuspage.io, or linked from www.zartico.com or
+    support.zartico.com. Incidents are handled through the help-center ticket form at
+    https://support.zartico.com/kb-tickets/new.
+sla:
+  published: false
+  note: No uptime, latency or data-freshness SLA is published. No terms of service page exists.
+changelog:
+  published: false
+  probed:
+    - url: https://www.zartico.com/changelog
+      status: 404
+    - url: https://support.zartico.com/release-notes
+      status: 404
+    - url: https://support.zartico.com/product-updates
+      status: 404
+    - url: https://support.zartico.com/whats-new
+      status: 404
+  substitute: >-
+    Product news is announced as prose in https://www.zartico.com/news and demonstrated in the
+    recurring "Zartico Connect" customer sessions listed on support.zartico.com. Neither is a
+    dated, structured changelog.
+support:
+  ticket_form: https://support.zartico.com/kb-tickets/new
+  help_center: https://support.zartico.com/
+  contact: https://www.zartico.com/contact-us

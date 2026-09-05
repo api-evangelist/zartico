@@ -1,0 +1,125 @@
+generated: '2026-09-05'
+method: probed
+source: >-
+  Derived from the fetched OGC capabilities documents in openapi/ and the OIDC/OAuth discovery
+  documents in well-known/, plus live anonymous requests to
+  https://geoserver.zartico.com/geoserver/ows on 2026-09-05. Zartico publishes no API conventions,
+  style guide or developer reference to search.
+note: |
+  Zartico has no REST API and therefore no REST conventions. Everything below describes the OGC
+  OWS surface, which is the only callable machine surface it publishes, plus the Okta identity
+  surface. Where a dimension does not apply to an OGC service it is marked na rather than none -
+  an OWS request is a query-string RPC, not a resource-oriented REST call, and scoring it against
+  REST conventions it never claimed would be a category error.
+auth_style:
+  ogc: none - anonymous. Fees "none", AccessConstraints "none" in the WMS and WCS capabilities.
+  identity: OAuth 2.0 / OpenID Connect (Okta), authorization_code + PKCE S256. See authentication/.
+  admin: GeoServer REST admin at /geoserver/rest returns 401 to anonymous callers.
+request_style:
+  protocol: OGC OWS - HTTP GET with a query-string operation dispatch (service, version, request)
+  post_supported: true
+  post_note: >-
+    WFS 2.0.0 advertises an XML POST binding for GetFeature and Transaction alongside the KVP GET
+    binding.
+  content_negotiation: >-
+    By explicit parameter, not by Accept header. WMS selects the response with format=, WFS with
+    outputFormat=. Available values are enumerated in the capabilities documents.
+versioning:
+  style: in-request parameter
+  detail: >-
+    OGC versions are negotiated per request via the version= parameter, and the server advertises
+    what it accepts. WMS 1.3.0 (also 1.1.1, 1.1.0), WFS 2.0.0, WCS 2.0.1 / 1.1.1 / 1.1.0. There is
+    no URL path version, no date-pinned version and no version header.
+  policy_published: false
+  policy_note: >-
+    Zartico publishes no versioning policy of its own. What is described here is the OGC
+    convention the software implements.
+pagination:
+  style: OGC WFS result paging
+  params: [startIndex, count]
+  response_fields: [numberMatched, numberReturned]
+  default_count: 1000000
+  evidence: >-
+    openapi/zartico-geoserver-wfs-capabilities.xml declares ImplementsResultPaging TRUE and
+    CountDefault 1000000.
+  note: WMS and WCS have no pagination concept; they return a rendered image or a coverage.
+filtering:
+  style: OGC Filter Encoding
+  detail: >-
+    WFS GetFeature accepts OGC Filter Encoding 2.0 predicates, plus CQL through GeoServer's
+    cql_filter vendor parameter, and spatial predicates over the declared CRS. This is a far
+    richer query surface than a REST sparse-fieldset convention, and it is declared in the
+    FilterCapabilities section of the WFS capabilities document.
+  sparse_fields: >-
+    WFS GetPropertyValue returns a single named property of matching features - the OGC analogue
+    of a sparse fieldset.
+metadata:
+  custom_metadata_supported: false
+  note: No user-defined metadata mechanism exists on any Zartico surface.
+request_id_tracing:
+  supported: false
+  note: >-
+    No X-Request-Id, X-Correlation-Id or equivalent header was returned on any probed response.
+    There is no documented way to reference a specific request when contacting support.
+error_envelope:
+  format: ogc-service-exception (XML)
+  catalog: errors/zartico-problem-types.yml
+  critical_note: >-
+    Errors are returned with HTTP 200 OK. Both a LayerNotDefined GetMap and an unknown operation
+    returned status 200 with a ServiceException body. Clients MUST parse the body root element;
+    the status code carries no failure signal.
+rate_limit_signaling:
+  headers_present: false
+  detail: See rate-limits/zartico-rate-limits.yml - no limits documented, no headers observed.
+idempotency:
+  coverage: none
+  mechanism: null
+  header: null
+  scope: []
+  retention: null
+  detail: >-
+    No replay-protection mechanism exists. There is no Idempotency-Key header, no client-supplied
+    request token and no documented deduplication anywhere on the estate. The read operations
+    (GetCapabilities, GetMap, GetFeatureInfo, GetFeature, GetPropertyValue, GetCoverage) are
+    naturally idempotent because they are safe HTTP GETs, but that is a property of GET, not a
+    mechanism Zartico provides. WFS Transaction - the one write surface advertised - carries no
+    replay protection: a Transaction submitted twice would be applied twice.
+  na: false
+reversibility:
+  grade: none
+  detail: >-
+    The estate has exactly one advertised write surface, WFS 2.0.0 Transaction
+    (ImplementsTransactionalWFS TRUE, with LockFeature and GetFeatureWithLock for optimistic
+    control), and Zartico publishes NO reversal path and NO window for it. There is no documented
+    undo, rollback, restore or soft-delete, and no retention statement covering a deleted or
+    updated feature. OGC WFS itself defines no reversal operation - a Transaction Delete is
+    final at the protocol level, and recovery would depend entirely on Zartico's own backups,
+    about which nothing is published.
+  write_surfaces:
+    - operation: WFS Transaction (Insert / Update / Delete / Replace)
+      endpoint: https://geoserver.zartico.com/geoserver/ows?service=WFS&version=2.0.0
+      reversal_operation: null
+      window: null
+      docs: null
+      note: >-
+        Advertised in the capabilities document. NOT exercised - no write, lock or transaction was
+        attempted against a live third-party service, and none should be. The presence of a
+        transactional write surface on an anonymously readable endpoint is recorded here as an
+        observation about the published contract, not as a recommendation to call it.
+  concurrency_control:
+    - LockFeature
+    - GetFeatureWithLock
+    - note: Locking bounds concurrent edits; it does not reverse a committed one.
+  na: false
+  na_reason: null
+dry_run_mode:
+  supported: false
+  detail: >-
+    No preview, validate-only or dry-run parameter is defined for WFS Transaction on this
+    instance, and none is documented. An agent cannot rehearse a write.
+cross_links:
+  errors: errors/zartico-problem-types.yml
+  lifecycle: lifecycle/zartico-lifecycle.yml
+  authentication: authentication/zartico-authentication.yml
+  rate_limits: rate-limits/zartico-rate-limits.yml
+  conformance: conformance/zartico-conformance.yml

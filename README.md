@@ -64,5 +64,56 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Zartico is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://www.nasdaqprivatemarket.com/
+Zartico is a Salt Lake City based destination-intelligence software company, founded in 2019, that
+operates the Zartico Destination Operating System (ZDOS) for destination marketing and management
+organizations, states, airports, attractions and ski resorts. It fuses daily geolocation
+observations, credit-card spending data, lodging and short-term-rental data, event demand and DMO
+digital analytics into a single integrated data model, surfaced through the Z5 visualization
+suite, Event Pulse and visitor-journey modules.
+
+- Website: https://www.zartico.com/
+- Help Center: https://support.zartico.com/
+- Blog: https://www.zartico.com/blog
+- GitHub organization: https://github.com/zartico
+
+## What Zartico publishes for machines
+
+Zartico runs **no developer program**: no developer portal, no REST API reference, no OpenAPI, no
+GraphQL, no webhooks, no MCP server, no agent card, no published SDK and no public pricing. Two
+machine-readable surfaces are nonetheless served anonymously and are captured here verbatim.
+
+**OGC Web Services** — `https://geoserver.zartico.com/geoserver/ows`
+
+| Service | Version | Contract | Surface |
+| --- | --- | --- | --- |
+| WMS | 1.3.0 | [`openapi/zartico-geoserver-wms-capabilities.xml`](openapi/zartico-geoserver-wms-capabilities.xml) | 34 layers, GetCapabilities/GetMap/GetFeatureInfo, 11 formats, 7,957 CRS |
+| WFS | 2.0.0 | [`openapi/zartico-geoserver-wfs-capabilities.xml`](openapi/zartico-geoserver-wfs-capabilities.xml) | 27 feature types, 11 operations incl. Transaction, GeoJSON/GML 3.2/KML |
+| WCS | 2.0.1 | [`openapi/zartico-geoserver-wcs-capabilities.xml`](openapi/zartico-geoserver-wcs-capabilities.xml) | enabled, 0 coverages advertised |
+
+The GetCapabilities documents **are** the contract — self-describing OGC XML, not OpenAPI. The
+service declares Fees `none` and AccessConstraints `none`. Layers sit in two workspaces,
+`zartographer` and `regions_app`.
+
+**Identity discovery** — Okta-hosted OpenID Connect and RFC 8414 metadata on two hosts,
+`login.zartico.com` and `platform.zartico.com`, saved under [`well-known/`](well-known/). They are
+identity metadata for the ZDOS applications; no third-party-callable resource server sits behind
+them, and Zartico authors zero product scopes.
+
+## How customers integrate
+
+Integration is **inbound**, not outbound — a destination grants Zartico read access to its own
+systems rather than calling a Zartico API: Google Analytics account access, Google Campaign
+Manager reporting access for `data@zartico.com`, and a per-customer geolocation attribution pixel
+deployed through Google Tag Manager.
+
+## Notes for a reader
+
+- **Errors return HTTP 200.** GeoServer answers a `LayerNotDefined` GetMap and an unknown
+  operation with status 200 and a `ServiceException` XML body. Parse the body, not the code.
+  See [`errors/`](errors/zartico-problem-types.yml).
+- **No reversibility and no idempotency.** WFS `Transaction` is the one advertised write surface
+  and carries no replay protection and no documented undo or window.
+  See [`conventions/`](conventions/zartico-conventions.yml).
+- **Two first-party npm packages, zero API clients.** Both are React modal components last
+  released January 2024. See [`packages/`](packages/zartico-packages.yml).
+- No `security.txt`, no status page, no changelog, no SLA, no documented rate limits.

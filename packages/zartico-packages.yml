@@ -1,0 +1,71 @@
+generated: '2026-09-05'
+method: searched
+source: >-
+  npm registry search (registry.npmjs.org/-/v1/search?text=zartico) and per-package metadata from
+  registry.npmjs.org; PyPI (pypi.org/pypi/zartico/json, 404); GitHub org api.github.com/orgs/zartico
+  (200, 0 public repositories); www.zartico.com and support.zartico.com searched for an SDK page.
+note: |
+  ZARTICO SHIPS NO API CLIENT LIBRARY. Two npm packages are published under Zartico staff
+  accounts and are unambiguously first-party (maintainer emails austin.daines@zartico.com and
+  michael.phan@zartico.com), but neither is an SDK - both are React/MUI modal UI components that
+  still carry the stock Vite scaffold description, and both are unpublished-to since January 2024.
+  They are recorded here as an honest inventory of what Zartico has put on a public registry, and
+  deliberately NOT wired as `type: SDKs`: no package in this file wraps a Zartico API, because no
+  Zartico API is published for one to wrap.
+
+  Registries checked with no first-party result: PyPI, Maven Central, NuGet, pkg.go.dev,
+  RubyGems, Packagist, crates.io. The github.com/zartico organization exists and is real (blog
+  www.zartico.com, location Salt Lake City, created 2019-06-05) but has ZERO public repositories,
+  so there is no source-distributed client either.
+packages:
+  - name: '@zartico/modal'
+    registry: npm
+    url: https://www.npmjs.com/package/@zartico/modal
+    official: true
+    kind: ui-component
+    language: JavaScript
+    version: 0.1.0
+    published: '2024-01-28'
+    first_published: '2024-01-26'
+    wraps_api: null
+    dependencies: ['@emotion/react', '@emotion/styled', '@mui/icons-material', '@mui/material', react, react-dom]
+    maintainers:
+      - austin.daines@zartico.com
+      - michael.phan@zartico.com
+    note: >-
+      Scoped to the @zartico npm organization and maintained from zartico.com addresses, so
+      first-party is not in doubt. It is a React + MUI modal component, not an API client. The
+      published description is still the unedited Vite template string ("This template provides a
+      minimal setup to get React working in Vite with HMR and some ESLint rules"), there is no
+      repository or homepage field, and the last release is 2024-01-28 - a 19-month-old single
+      0.1.0 release.
+  - name: zartico-modal
+    registry: npm
+    url: https://www.npmjs.com/package/zartico-modal
+    official: true
+    kind: ui-component
+    language: JavaScript
+    version: 0.0.19
+    published: '2024-01-17'
+    first_published: '2023-12-15'
+    wraps_api: null
+    dependencies: ['@emotion/react', '@emotion/styled', '@mui/material', react, react-dom]
+    maintainers:
+      - michael.phan@zartico.com
+    note: >-
+      The unscoped predecessor of @zartico/modal, superseded eleven days after its last release.
+      Same stock Vite description, no repository field. Nineteen 0.0.x releases between
+      2023-12-15 and 2024-01-17, then nothing.
+counts:
+  total: 2
+  official: 2
+  api_clients: 0
+  abandoned_since: '2024-01-28'
+registries_checked_empty:
+  - pypi
+  - maven-central
+  - nuget
+  - pkg.go.dev
+  - rubygems
+  - packagist
+  - crates.io

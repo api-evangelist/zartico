@@ -1,23 +1,163 @@
 aid: zartico
 name: Zartico
-description: 'Zartico is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  Zartico is a Salt Lake City based destination-intelligence software company, founded in 2019,
+  that operates the Zartico Destination Operating System (ZDOS) for destination marketing and
+  management organizations, states, airports, attractions and ski resorts. The platform fuses
+  daily geolocation observations, credit-card spending data, lodging and short-term-rental data,
+  event demand and DMO digital analytics into a single integrated data model, and surfaces it
+  through the Z5 visualization suite, Event Pulse and visitor-journey modules. Zartico publishes
+  no general-purpose developer portal or REST API reference; its public machine-readable surface
+  is an anonymously readable OGC GeoServer estate (WMS 1.3.0, WFS 2.0.0, WCS 2.0.1) at
+  geoserver.zartico.com and two Okta-hosted OpenID Connect / OAuth 2.0 authorization servers at
+  login.zartico.com and platform.zartico.com. Customer-facing integration is inbound rather than
+  outbound - Zartico is granted read access to a destination's Google Analytics, ad server and
+  CRM, and deploys a per-client geolocation attribution pixel.
+image: https://go.zartico.com/hubfs/zartico-logo-final_rgb-white-horizontal.png
 url: https://raw.githubusercontent.com/api-evangelist/zartico/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-09-05'
 modified: '2026-09-05'
 tags:
 - Company
-apis: []
+- Travel
+- Tourism
+- Destination Marketing
+- Location Intelligence
+- Geospatial
+- Analytics
+- Data
+- Business Intelligence
+- OGC
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis:
+- aid: zartico-geoserver
+  name: Zartico GeoServer OGC Web Services
+  description: >-
+    Zartico operates a public, anonymously readable GeoServer instance at geoserver.zartico.com
+    serving OGC Web Services over its destination geospatial estate. The WMS 1.3.0 capabilities
+    document advertises 34 named layers across two workspaces (zartographer and regions_app) -
+    client boundary polygons, client regions, census tracts, county subdivisions, incorporated
+    places, ZCTA boundaries, state and county boundaries, synthetic cities and point-of-interest
+    layers - with GetCapabilities, GetMap and GetFeatureInfo, eleven output image formats and
+    7,957 supported CRS codes. The WFS 2.0.0 capabilities document advertises 27 feature types
+    and eleven operations including Transaction, LockFeature, GetPropertyValue and stored
+    queries, with GeoJSON, GML 3.2 and KML output, result paging and a CountDefault of 1,000,000.
+    A WCS 2.0.1 endpoint answers GetCapabilities but currently advertises zero coverages. The
+    service declares Fees "none" and AccessConstraints "none". This is a self-describing OGC
+    contract, not an OpenAPI - the GetCapabilities documents ARE the machine-readable interface.
+  image: https://go.zartico.com/hubfs/zartico-logo-final_rgb-white-horizontal.png
+  humanURL: https://geoserver.zartico.com/geoserver/index.html
+  baseURL: https://geoserver.zartico.com/geoserver/ows
+  tags:
+  - Geospatial
+  - OGC
+  - WMS
+  - WFS
+  - WCS
+  - Maps
+  - Location Intelligence
+  properties:
+  - type: GetCapabilities
+    url: openapi/zartico-geoserver-wms-capabilities.xml
+  - type: GetCapabilities
+    url: openapi/zartico-geoserver-wfs-capabilities.xml
+  - type: GetCapabilities
+    url: openapi/zartico-geoserver-wcs-capabilities.xml
+  - type: WMS
+    url: https://geoserver.zartico.com/geoserver/ows?service=WMS&version=1.3.0&request=GetCapabilities
+  - type: WFS
+    url: https://geoserver.zartico.com/geoserver/ows?service=WFS&version=2.0.0&request=GetCapabilities
+  - type: Conformance
+    url: conformance/zartico-conformance.yml
+- aid: zartico-identity
+  name: Zartico Identity (OpenID Connect / OAuth 2.0)
+  description: >-
+    Zartico fronts its platform with Okta-hosted identity, and two of its hosts publish complete,
+    anonymously readable discovery documents - login.zartico.com and platform.zartico.com. Each
+    serves both OpenID Connect Discovery 1.0 (/.well-known/openid-configuration) and RFC 8414
+    OAuth 2.0 Authorization Server Metadata (/.well-known/oauth-authorization-server), declaring
+    authorization, token, userinfo, JWKS, introspection, revocation and dynamic client
+    registration endpoints, RS256 id-token signing, PKCE (S256), and the openid, email, profile,
+    address, phone, offline_access and groups scopes. login.zartico.com additionally advertises
+    device_code, CIBA and Okta OOB/OTP grant types. These documents are identity metadata for the
+    ZDOS applications; they are not a product data API, and no resource-server API reference is
+    published against them.
+  image: https://go.zartico.com/hubfs/zartico-logo-final_rgb-white-horizontal.png
+  humanURL: https://login.zartico.com/
+  baseURL: https://login.zartico.com
+  tags:
+  - Authentication
+  - Identity
+  - OAuth
+  - OpenID Connect
+  - Security
+  properties:
+  - type: OpenIDConfiguration
+    url: well-known/zartico-login-openid-configuration.json
+  - type: OAuthAuthorizationServer
+    url: well-known/zartico-login-oauth-authorization-server.json
+  - type: Authentication
+    url: authentication/zartico-authentication.yml
+  - type: OAuthScopes
+    url: scopes/zartico-scopes.yml
 common:
 - type: Website
-  url: https://www.nasdaqprivatemarket.com/
+  url: https://www.zartico.com/
+- type: HelpCenter
+  url: https://support.zartico.com/
+- type: Support
+  url: https://support.zartico.com/kb-tickets/new
+- type: Blog
+  url: https://www.zartico.com/blog
+- type: BlogRSS
+  url: https://www.zartico.com/blog/rss.xml
+- type: GitHubOrganization
+  url: https://github.com/zartico
+- type: SignUp
+  url: https://www.zartico.com/see-a-live-demo
+- type: PrivacyPolicy
+  url: https://www.zartico.com/privacy-promise
+- type: Careers
+  url: https://www.zartico.com/careers
+- type: WellKnown
+  url: well-known/zartico-well-known.yml
+- type: Conformance
+  url: conformance/zartico-conformance.yml
+- type: Authentication
+  url: authentication/zartico-authentication.yml
+- type: OAuthScopes
+  url: scopes/zartico-scopes.yml
+- type: DomainSecurity
+  url: security/zartico-domain-security.yml
+- type: Packages
+  url: packages/zartico-packages.yml
+- type: Components
+  url: components/zartico-components.yml
+- type: LLMsTxt
+  url: llms/zartico-llms.txt
+- type: MCPServer
+  url: mcp/zartico-mcp.yml
+- type: Conventions
+  url: conventions/zartico-conventions.yml
+- type: Lifecycle
+  url: lifecycle/zartico-lifecycle.yml
+- type: Plans
+  url: plans/zartico-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/zartico-rate-limits.yml
+- type: ErrorCatalog
+  url: errors/zartico-problem-types.yml
+x-enrichment:
+  date: '2026-09-05'
+  status: enriched
+  artifacts_added: 21
+  pass: local-v3
+x-coverage:
+  state: covered

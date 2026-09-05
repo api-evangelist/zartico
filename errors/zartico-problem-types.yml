@@ -1,0 +1,69 @@
+generated: '2026-09-05'
+method: probed
+source: >-
+  Live anonymous requests against https://geoserver.zartico.com/geoserver/ows on 2026-09-05, each
+  response body read in full. No error reference page is published anywhere on www.zartico.com or
+  support.zartico.com.
+format: ogc-service-exception
+note: |
+  NOT RFC 9457. Zartico exposes no JSON API, so there is no application/problem+json surface. The
+  only observable error contract on the estate is OGC exception XML from GeoServer, in two
+  distinct shapes depending on which service handles the request.
+
+  THE FINDING AN AGENT NEEDS: errors are returned with HTTP 200 OK. A GetMap for a layer that does
+  not exist and an entirely unknown operation both returned status 200 with a ServiceException
+  body. A client that branches on the status code will read every one of these failures as a
+  success. The error signal is in the body's root element and @code attribute, nowhere else.
+envelopes:
+  - id: ows-exception-report
+    root: '{http://www.opengis.net/ows}ExceptionReport'
+    used_by: service dispatch (unknown or disabled service)
+    fields: [exceptionCode, locator, ExceptionText]
+    schema: https://geoserver.zartico.com/geoserver/schemas/ows/1.0.0/owsExceptionReport.xsd
+  - id: wms-service-exception-report
+    root: '{http://www.opengis.net/ogc}ServiceExceptionReport'
+    used_by: WMS 1.3.0 operation handling
+    fields: [code, locator, text]
+    schema: https://geoserver.zartico.com/geoserver/schemas/wms/1.3.0/exceptions_1_3_0.xsd
+problem_types:
+  - code: InvalidParameterValue
+    envelope: ows-exception-report
+    http_status: 200
+    locator: service
+    observed_text: 'No service: ( WMTS )'
+    observed_at: https://geoserver.zartico.com/geoserver/ows?service=WMTS&version=1.0.0&request=GetCapabilities
+    meaning: The requested OWS service is not enabled on this endpoint.
+    remediation: >-
+      Use service=WMS, WFS or WCS. WMTS and CSW are not deployed on this GeoServer instance.
+    method: probed
+  - code: OperationNotSupported
+    envelope: wms-service-exception-report
+    http_status: 200
+    locator: the request parameter value
+    observed_text: No such operation WMS 1.3.0 NoSuchOperation
+    observed_at: https://geoserver.zartico.com/geoserver/ows?service=WMS&version=1.3.0&request=NoSuchOperation
+    meaning: The request parameter names an operation the service does not implement.
+    remediation: >-
+      WMS 1.3.0 on this instance implements GetCapabilities, GetMap and GetFeatureInfo only.
+    method: probed
+  - code: LayerNotDefined
+    envelope: wms-service-exception-report
+    http_status: 200
+    locator: layers
+    observed_text: Could not find layer does_not_exist
+    observed_at: https://geoserver.zartico.com/geoserver/ows (GetMap with an unknown layer name)
+    meaning: The layers parameter names a layer absent from the capabilities document.
+    remediation: >-
+      Resolve layer names from the WMS GetCapabilities document
+      (openapi/zartico-geoserver-wms-capabilities.xml); names are workspace-qualified, e.g.
+      zartographer:county_boundaries.
+    method: probed
+not_observed:
+  note: >-
+    OGC defines further exception codes (InvalidCRS, InvalidFormat, StyleNotDefined,
+    CurrentUpdateSequence, MissingParameterValue). They are not listed as problem types here
+    because they were not provoked and Zartico publishes no error reference to read them from.
+    Only what was actually observed is recorded.
+counts:
+  observed: 3
+  documented_by_provider: 0
