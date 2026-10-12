@@ -1,0 +1,11 @@
+[
+  {
+    "repo": "zartico",
+    "captured_at": "2026-10-11T195101",
+    "source_url": "https://zartico.com",
+    "source_type": "root-domain",
+    "file": "zartico-2026-10-11T195101.png",
+    "bytes": 607783,
+    "capture": "playwright-local"
+  }
+]
